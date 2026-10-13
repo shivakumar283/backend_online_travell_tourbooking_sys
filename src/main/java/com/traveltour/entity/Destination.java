@@ -1,0 +1,42 @@
+package com.traveltour.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Entity
+@Table(name = "destinations")
+@EntityListeners(AuditingEntityListener.class)
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+public class Destination {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String country;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @CreatedDate
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL)
+    private List<TourPackage> tourPackages;
+
+    @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL)
+    private List<Review> reviews;
+}
